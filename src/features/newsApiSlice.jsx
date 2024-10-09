@@ -43,6 +43,6 @@ const newsApiSlice = createSlice({
   },
 });
 
-export const { setNews } = newsApiSlice.actions;
+export const { clearNewsData } = newsApiSlice.actions;
 
 export default newsApiSlice.reducer;
