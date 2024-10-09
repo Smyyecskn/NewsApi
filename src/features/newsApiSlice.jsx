@@ -13,7 +13,7 @@ export const getNewsData = createAsyncThunk(
     //Api istek fonksiyonu
     const API_KEY = "1a1a999e0d7240a6bd2dead87bcca78e";
     const url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`;
-    const { data } = await axios.get(url);
+    const { data } = await axios(url);
     console.log("data", data.articles);
     return data.data.articles;
   }
@@ -26,7 +26,20 @@ const newsApiSlice = createSlice({
     clearNewsData: (state) => {
       state.newsData = [];
     },
-    // setNewsData: (state, { payload }) => {},
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getNewsData.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getNewsData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.newsData = action.payload;
+      })
+      .addCase(getNewsData.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      });
   },
 });
 
