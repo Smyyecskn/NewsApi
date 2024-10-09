@@ -7,14 +7,20 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/authSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    dispatch(setUser({ email, password }));
+    navigate("/");
     setEmail("");
     setPassword("");
   };
@@ -77,7 +83,11 @@ export default function Login() {
 
       <Typography variant="body2" color="text.secondary" align="center">
         {"Copyright © "}
-        <Link color="inherit" href="https://www.linkedin.com/in/smyyecskn1/">
+        <Link
+          color="inherit"
+          target="_blank"
+          href="https://www.linkedin.com/in/smyyecskn1/"
+        >
           Smyye Production
         </Link>
         {new Date().getFullYear()}

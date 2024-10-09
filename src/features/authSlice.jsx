@@ -12,7 +12,7 @@ const authSlice = createSlice({
       state.user = payload;
     },
     clearUser: (state) => {
-      state.user = initialState.user;
+      state.user = initialState;
     },
   },
 });
