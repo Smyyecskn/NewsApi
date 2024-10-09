@@ -6,18 +6,33 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { CardMedia } from "@mui/material";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { getNewsData } from "../features/newsApiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { clearNewsData, getNewsData } from "../features/newsApiSlice";
+import loadingGif from "../assets/loading.gif";
+import defaultImage from "../assets/img.jpeg"; // Varsayılan resim
 
 const News = () => {
   const dispatch = useDispatch();
+  const { newsData, error, loading } = useSelector((state) => state.newsApi);
+
   useEffect(() => {
     dispatch(getNewsData());
-  }, []);
+
+    return () => {
+      dispatch(clearNewsData());
+    };
+  }, [dispatch]);
 
   return (
     <>
       <h1>NEWS</h1>
+      {loading && (
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <img src={loadingGif} alt="loading" width="200px" height="200px" />
+        </Box>
+      )}
+
+      {error && <h1>Something went wrong</h1>}
       <Box
         xs={{ d: "flex" }}
         display="flex"
@@ -25,13 +40,13 @@ const News = () => {
         justifyContent="space-evenly"
         flexWrap="wrap"
       >
-        {[1, 2, 3, 4, 5].map((item, index) => (
+        {newsData?.map((item, index) => (
           <Card sx={{ maxWidth: 345, m: 5, maxHeight: 600 }} key={index}>
             <CardMedia
               component="img"
               height="250"
-              image={item?.urlToImage}
-              alt="img"
+              image={item?.urlToImage ? item.urlToImage : defaultImage} // Eğer resim yoksa varsayılanı kullan
+              alt={item?.title || "defaultImage"}
             />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
